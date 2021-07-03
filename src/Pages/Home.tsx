@@ -1,15 +1,13 @@
-import React from 'react'
+import React from 'react';
+import OrderList from '../Components/OrderList/OrderList';
+// import styled from 'styled-components';
 
-interface Props {
-    
-}
+// interface Props {
+
+// }
 
 const Home = () => {
-    return (
-        <div>
-            Home
-        </div>
-    )
-}
+  return <OrderList />;
+};
 
-export default Home
+export default Home;
