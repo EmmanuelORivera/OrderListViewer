@@ -5,7 +5,7 @@ import { Order } from './orderListSlice';
 import { BaseState, ValidationErrors, StatusCode, Product } from './types';
 
 interface OrderDetailState extends BaseState {
-  items: Product[];
+  order: Order | null;
 }
 
 interface Data {
@@ -13,7 +13,7 @@ interface Data {
   order: Order;
 }
 export const fetchOrderDetails = createAsyncThunk<
-  Product[],
+  Order,
   { id: string },
   { rejectValue: ValidationErrors }
 >('order/fetchOrder', async ({ id }, { rejectWithValue }) => {
@@ -26,7 +26,7 @@ export const fetchOrderDetails = createAsyncThunk<
       config
     );
 
-    return data.order.items;
+    return data.order;
   } catch (err) {
     let error: AxiosError<ValidationErrors> = err;
     if (!error.response) {
@@ -37,7 +37,7 @@ export const fetchOrderDetails = createAsyncThunk<
 });
 
 const initialState: OrderDetailState = {
-  items: [],
+  order: null,
   status: StatusCode.IDLE,
   errorMessage: '',
 };
@@ -52,7 +52,7 @@ const orderDetailSlice = createSlice({
     });
     builder.addCase(fetchOrderDetails.fulfilled, (state, action) => {
       state.status = StatusCode.IDLE;
-      state.items = action.payload;
+      state.order = action.payload;
     });
     builder.addCase(fetchOrderDetails.rejected, (state, action) => {
       state.status = StatusCode.REJECTED;
