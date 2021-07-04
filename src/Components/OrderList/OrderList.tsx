@@ -8,12 +8,10 @@ import {
 } from '../../Redux/slices/orderListSlice';
 import { useAppDispatch, useAppSelector } from '../../Redux/hooks';
 
-const StyledHeaderDiv = styled.div`
+export const StyledHeaderDiv = styled.div`
   background: #020054;
   border-radius: 0.5rem 0.5rem 0 0;
   text-align: center;
-`;
-const StyledHeaderTitle = styled.h2`
   font-size: 1.2rem;
   padding: 0.8rem 0;
   color: white;
@@ -47,7 +45,7 @@ const OrderList = () => {
   return (
     <>
       <StyledHeaderDiv>
-        <StyledHeaderTitle>Orders List</StyledHeaderTitle>
+        <h2>Orders List</h2>
       </StyledHeaderDiv>
       {orders?.map((order) => {
         return (

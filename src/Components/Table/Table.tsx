@@ -7,7 +7,6 @@ import { Product } from '../../Redux/slices/types';
 const StyledTable = styled.table`
   width: 100%;
   border-collapse: collapse;
-  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.08);
   text-align: center;
 `;
 
