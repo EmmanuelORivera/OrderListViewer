@@ -5,14 +5,13 @@ import Button from '../Button/Button';
 import {
   fetchAllOrders,
   orderListSelector,
-} from '../../Redux/slices/orderList';
+} from '../../Redux/slices/orderListSlice';
 import { useAppDispatch, useAppSelector } from '../../Redux/hooks';
 
 const StyledHeaderDiv = styled.div`
   background: #020054;
   border-radius: 0.5rem 0.5rem 0 0;
   text-align: center;
-  margin-top: 3rem;
 `;
 const StyledHeaderTitle = styled.h2`
   font-size: 1.2rem;

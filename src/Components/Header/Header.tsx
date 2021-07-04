@@ -7,6 +7,7 @@ const StyledHeader = styled.header`
   color: white;
   padding: 2rem 0;
   font-size: 2rem;
+  margin-bottom: 3.5rem;
 `;
 
 const Header = () => {
