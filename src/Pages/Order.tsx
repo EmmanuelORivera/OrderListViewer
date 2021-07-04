@@ -1,6 +1,7 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Table from '../Components/Table/Table';
+import Modal from '../Components/Modal/Modal';
 import { ReactComponent as Padlock } from '../Images/Padlock.svg';
 import { ReactComponent as Add } from '../Images/Add.svg';
 import { RouteComponentProps } from 'react-router-dom';
@@ -11,32 +12,27 @@ import {
   orderDetailSelector,
 } from '../Redux/slices/orderDetailSlice';
 import { StatusCode } from '../Redux/slices/types';
-import { primaryButton } from '../Components/Button/sharedStyles';
+import {
+  StyledPrimaryButton,
+  StyledSecundaryButton,
+  StyledButtonsWrapper,
+} from '../Components/Button/Button';
 
-const StyledPrimaryButton = styled.button`
-  ${primaryButton}
-`;
-
-const StyledSecundaryButton = styled(StyledPrimaryButton)`
-  border: 1px solid black;
-  background: #e2eeff;
-  color: black;
-`;
 const StyledTableWrapper = styled.div`
   box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   border-radius: 0.8rem 0.8rem 0 0;
 `;
 
-const StyledButtonsWrapper = styled.div`
-  padding: 2rem 3rem;
-  display: flex;
-  justify-content: right;
-  gap: 2rem;
-`;
 interface Props extends RouteComponentProps<{ id: string }> {}
 
+const useBoolean = (initialValue: boolean) => useState<boolean>(initialValue);
+export type UseBooleanValue = ReturnType<typeof useBoolean>[0];
+export type UseBooleanSetValue = ReturnType<typeof useBoolean>[1];
+
 const Order: FC<Props> = ({ match }) => {
+  const [showModal, setShowModal] = useBoolean(true);
+
   const dispatch = useAppDispatch();
   const { order, errorMessage, status } = useAppSelector(orderDetailSelector);
   const orderId = match.params.id;
@@ -67,7 +63,11 @@ const Order: FC<Props> = ({ match }) => {
           </StyledHeaderDiv>
           <Table data={order.items}></Table>
           <StyledButtonsWrapper>
-            <StyledSecundaryButton>
+            <StyledSecundaryButton
+              onClick={() => {
+                setShowModal((prevShowModal) => !prevShowModal);
+              }}
+            >
               <Add />
               <span>New Product</span>
             </StyledSecundaryButton>
@@ -77,6 +77,7 @@ const Order: FC<Props> = ({ match }) => {
           </StyledButtonsWrapper>
         </StyledTableWrapper>
       )}
+      {showModal && <Modal setShowModal={setShowModal} />}
     </>
   );
 };
