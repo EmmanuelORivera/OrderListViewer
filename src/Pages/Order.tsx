@@ -1,7 +1,11 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import Table from '../Components/Table/Table';
 import Modal from '../Components/Modal/Modal';
+import useBoolean from '../Utils/useBoolean';
+import { sumPriceItems } from '../Utils/sumPriceItems';
+import FormModalContent from '../Components/Modal/FormModalContent';
+import SuccessModalContent from '../Components/Modal/SuccessModalContent';
 import { ReactComponent as Padlock } from '../Images/Padlock.svg';
 import { ReactComponent as Add } from '../Images/Add.svg';
 import { RouteComponentProps } from 'react-router-dom';
@@ -26,12 +30,9 @@ const StyledTableWrapper = styled.div`
 
 interface Props extends RouteComponentProps<{ id: string }> {}
 
-const useBoolean = (initialValue: boolean) => useState<boolean>(initialValue);
-export type UseBooleanValue = ReturnType<typeof useBoolean>[0];
-export type UseBooleanSetValue = ReturnType<typeof useBoolean>[1];
-
 const Order: FC<Props> = ({ match }) => {
-  const [showModal, setShowModal] = useBoolean(false);
+  const [showFormModal, setShowFormModal] = useBoolean(false);
+  const [showSuccessModal, setShowSuccessModal] = useBoolean(false);
 
   const dispatch = useAppDispatch();
   const { order, errorMessage, status } = useAppSelector(orderDetailSelector);
@@ -41,16 +42,6 @@ const Order: FC<Props> = ({ match }) => {
     const thunkArg = { id: orderId };
     dispatch(fetchOrderDetails(thunkArg));
   }, [dispatch, orderId]);
-
-  const sumPriceItems = () => {
-    if (order) {
-      const sum = order.items.reduce((acc, currVal) => {
-        return acc + Number(currVal.price) * Number(currVal.quantity);
-      }, 0);
-      const fixedSum = sum.toFixed(2);
-      return fixedSum;
-    }
-  };
 
   return (
     <>
@@ -65,19 +56,40 @@ const Order: FC<Props> = ({ match }) => {
           <StyledButtonsWrapper>
             <StyledSecundaryButton
               onClick={() => {
-                setShowModal((prevShowModal) => !prevShowModal);
+                setShowFormModal((prevShowModal) => !prevShowModal);
               }}
             >
               <Add />
               <span>New Product</span>
             </StyledSecundaryButton>
-            <StyledPrimaryButton>
-              <Padlock /> <span>Pay ${sumPriceItems()}</span>
+            <StyledPrimaryButton
+              onClick={() => {
+                setShowSuccessModal(
+                  (prevShowSuccessModal) => !prevShowSuccessModal
+                );
+              }}
+            >
+              <Padlock /> <span>Pay ${sumPriceItems(order)}</span>
             </StyledPrimaryButton>
           </StyledButtonsWrapper>
         </StyledTableWrapper>
       )}
-      {showModal && <Modal setShowModal={setShowModal} />}
+      {showFormModal && (
+        <Modal
+          setShowModal={setShowFormModal}
+          render={() => (
+            <FormModalContent setShowFormModal={setShowFormModal} />
+          )}
+        />
+      )}
+      {showSuccessModal && (
+        <Modal
+          setShowModal={setShowSuccessModal}
+          render={() => (
+            <SuccessModalContent setShowSuccessModal={setShowSuccessModal} />
+          )}
+        />
+      )}
     </>
   );
 };

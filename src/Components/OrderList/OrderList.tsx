@@ -7,6 +7,7 @@ import {
   orderListSelector,
 } from '../../Redux/slices/orderListSlice';
 import { useAppDispatch, useAppSelector } from '../../Redux/hooks';
+import { StatusCode } from '../../Redux/slices/types';
 
 export const StyledHeaderDiv = styled.div`
   background: #020054;
@@ -37,36 +38,41 @@ const StyledCardBlueItem = styled(StyledCardItem)`
 const OrderList = () => {
   const dispatch = useAppDispatch();
 
-  const { orders } = useAppSelector(orderListSelector);
-
+  const { orders, status, errorMessage } = useAppSelector(orderListSelector);
   useEffect(() => {
     dispatch(fetchAllOrders());
   }, [dispatch]);
   return (
     <>
-      <StyledHeaderDiv>
-        <h2>Orders List</h2>
-      </StyledHeaderDiv>
-      {orders?.map((order) => {
-        return (
-          <StyledCard key={order.id}>
-            <StyledCardBlueItem>
-              <Bold>Order:</Bold> {order.name}
-            </StyledCardBlueItem>
-            <StyledCardItem>
-              <Bold>Shipping Address:</Bold> {order.shippingAddress.address1}
-            </StyledCardItem>
-            <StyledCardItem>
-              <Bold>Country:</Bold> {order.shippingAddress.country.name}
-            </StyledCardItem>
-            <StyledCardItem>
-              <Button to='/order' id={order.id}>
-                <Polygon /> <span>Show</span>
-              </Button>
-            </StyledCardItem>
-          </StyledCard>
-        );
-      })}
+      {status === StatusCode.PENDING && <h1>Loading...</h1>}
+      {status === StatusCode.REJECTED && <h2>{errorMessage}</h2>}
+      {status === StatusCode.IDLE && (
+        <StyledHeaderDiv>
+          <h2>Orders List</h2>
+        </StyledHeaderDiv>
+      )}
+      {status === StatusCode.IDLE &&
+        orders &&
+        orders.map((order) => {
+          return (
+            <StyledCard key={order.id}>
+              <StyledCardBlueItem>
+                <Bold>Order:</Bold> {order.name}
+              </StyledCardBlueItem>
+              <StyledCardItem>
+                <Bold>Shipping Address:</Bold> {order.shippingAddress.address1}
+              </StyledCardItem>
+              <StyledCardItem>
+                <Bold>Country:</Bold> {order.shippingAddress.country.name}
+              </StyledCardItem>
+              <StyledCardItem>
+                <Button to='/order' id={order.id}>
+                  <Polygon /> <span>Show</span>
+                </Button>
+              </StyledCardItem>
+            </StyledCard>
+          );
+        })}
     </>
   );
 };

@@ -8,7 +8,7 @@ import {
 } from '../Button/Button';
 import { ReactComponent as Add } from '../../Images/AddWhite.svg';
 import { ReactComponent as Close } from '../../Images/Close.svg';
-import { UseBooleanSetValue } from '../../Pages/Order';
+import { UseBooleanSetValue } from '../../Utils/useBoolean';
 import useForm from './useForm';
 import validate from './validateInfo';
 
