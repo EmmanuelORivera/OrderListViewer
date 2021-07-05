@@ -9,7 +9,8 @@
 
 ## Generar archivo .env.local
 
-Se tiene que colocar el TOKEN en el archivo .env.local para poder realizar las peticiones GET Ejemplo:
+Se tiene que colocar el TOKEN, en el ROOT del projecto en un archivo llamado .env.local.
+El TOKEN tiene que ser llamado nombrado de la siguiente manera:
 REACT_APP_TOKEN = AQUI VA EL TOKEN
 
 ## Instalar las dependencias
