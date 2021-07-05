@@ -31,7 +31,7 @@ export type UseBooleanValue = ReturnType<typeof useBoolean>[0];
 export type UseBooleanSetValue = ReturnType<typeof useBoolean>[1];
 
 const Order: FC<Props> = ({ match }) => {
-  const [showModal, setShowModal] = useBoolean(true);
+  const [showModal, setShowModal] = useBoolean(false);
 
   const dispatch = useAppDispatch();
   const { order, errorMessage, status } = useAppSelector(orderDetailSelector);
@@ -45,7 +45,7 @@ const Order: FC<Props> = ({ match }) => {
   const sumPriceItems = () => {
     if (order) {
       const sum = order.items.reduce((acc, currVal) => {
-        return acc + Number(currVal.price);
+        return acc + Number(currVal.price) * Number(currVal.quantity);
       }, 0);
       const fixedSum = sum.toFixed(2);
       return fixedSum;
