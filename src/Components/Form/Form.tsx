@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import styled, { css } from 'styled-components';
 import CurrencyInput from 'react-currency-input-field';
 import {
@@ -9,6 +9,8 @@ import {
 import { ReactComponent as Add } from '../../Images/AddWhite.svg';
 import { ReactComponent as Close } from '../../Images/Close.svg';
 import { UseBooleanSetValue } from '../../Pages/Order';
+import useForm from './useForm';
+import validate from './validateInfo';
 
 const baseInputStyles = css`
   padding: 0.8rem;
@@ -34,99 +36,99 @@ const StyledForm = styled.form`
 
 const StyledWrapperInput = styled.div`
   & * {
-    margin-bottom: 1.3rem;
+    margin-bottom: 1rem;
   }
+`;
+
+const StyledErrorMessage = styled.div`
+  background: #f8d7da;
+  text-align: center;
+  padding: 0.4rem;
+  color: #721c24;
 `;
 
 interface Props {
   setShowModal: UseBooleanSetValue;
 }
 const Form: FC<Props> = ({ setShowModal }) => {
-  const initialState = {
-    sku: { value: '', error: '' },
-    name: { value: '', error: '' },
-    quantity: { value: '', error: '' },
-    price: { value: '', error: '' },
-  };
-  const [state, setState] = useState(initialState);
-  type TSetState = typeof setState;
-  const handleChange = (
-    setState: TSetState,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const target = e.target.name as 'sku' | 'name' | 'quantity' | 'price';
-    const value = e.target.value;
-    setState((prevState) => {
-      return { ...prevState, [target]: { ...prevState[target], value } };
-    });
-  };
+  const { handleChange, handleSubmit, values, setValues, errors } =
+    useForm(validate);
+
+  type TSetState = typeof setValues;
 
   const handleCurrencyInput = (
     value = '',
     name = 'price',
-    setState: TSetState
+    setValues: TSetState
   ) => {
-    setState((prevState) => {
-      return { ...prevState, [name]: { ...prevState['price'], value } };
+    setValues((prevState) => {
+      return { ...prevState, [name]: value };
     });
   };
   const handleCancelClick = (
-    setState: TSetState,
     setShowModal: UseBooleanSetValue,
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
     setShowModal((prevShowModal) => !prevShowModal);
-    setState(initialState);
   };
+
   return (
-    <StyledForm>
+    <StyledForm onSubmit={handleSubmit}>
       <StyledWrapperInput>
         <StyledLabel>SKU</StyledLabel>
         <StyledInput
           type='text'
           name='sku'
-          required
-          value={state.sku.value}
-          onChange={(e) => handleChange(setState, e)}
+          value={values.sku}
+          onChange={handleChange}
         />
       </StyledWrapperInput>
+      {errors.sku && <StyledErrorMessage>{errors.sku}</StyledErrorMessage>}
       <StyledWrapperInput>
         <StyledLabel>Name</StyledLabel>
         <StyledInput
           type='text'
           name='name'
-          onChange={(e) => handleChange(setState, e)}
+          value={values.name}
+          onChange={handleChange}
         />
+        {errors.name && <StyledErrorMessage>{errors.name}</StyledErrorMessage>}
       </StyledWrapperInput>
       <StyledWrapperInput>
         <StyledLabel>Quantity</StyledLabel>
         <StyledInput
           type='number'
           name='quantity'
-          pattern='[0-9]'
-          onChange={(e) => handleChange(setState, e)}
+          value={values.quantity}
+          onChange={handleChange}
         />
+        {errors.quantity && (
+          <StyledErrorMessage>{errors.quantity}</StyledErrorMessage>
+        )}
       </StyledWrapperInput>
       <StyledWrapperInput>
         <StyledLabel>Price</StyledLabel>
         <StyledCurrencyInput
-          required
           name='price'
           prefix='$'
+          value={values.price}
           onValueChange={(value, name) =>
-            handleCurrencyInput(value, name, setState)
+            handleCurrencyInput(value, name, setValues)
           }
         />
+        {errors.price && (
+          <StyledErrorMessage>{errors.price}</StyledErrorMessage>
+        )}
       </StyledWrapperInput>
       <StyledButtonsWrapper>
         <StyledSecundaryButton
-          onClick={(e) => handleCancelClick(setState, setShowModal, e)}
+          onClick={(e) => handleCancelClick(setShowModal, e)}
         >
           <Close />
           <span>Cancel</span>
         </StyledSecundaryButton>
-        <StyledPrimaryButton type='submit' onClick={(e) => e.preventDefault()}>
+        <StyledPrimaryButton type='submit'>
           <Add /> <span>Add Product</span>
         </StyledPrimaryButton>
       </StyledButtonsWrapper>

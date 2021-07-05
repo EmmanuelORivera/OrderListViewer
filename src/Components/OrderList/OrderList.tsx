@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { ReactComponent as Polygon } from '../../Images/Polygon.svg';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Button from '../Button/Button';
 import {
   fetchAllOrders,

@@ -1,8 +1,8 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 import { RootState } from '../store';
 import { Order } from './orderListSlice';
-import { BaseState, ValidationErrors, StatusCode, Product } from './types';
+import { BaseState, ValidationErrors, StatusCode } from './types';
 
 interface OrderDetailState extends BaseState {
   order: Order | null;
@@ -45,7 +45,12 @@ const initialState: OrderDetailState = {
 const orderDetailSlice = createSlice({
   name: 'order',
   initialState,
-  reducers: {},
+  reducers: {
+    addItem: (state, action: PayloadAction<Order['items'][0]>) => {
+      console.log('REDUCER');
+      state.order?.items.push(action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchOrderDetails.pending, (state) => {
       state.status = StatusCode.PENDING;
@@ -65,5 +70,6 @@ const orderDetailSlice = createSlice({
   },
 });
 
+export const { addItem } = orderDetailSlice.actions;
 export default orderDetailSlice.reducer;
 export const orderDetailSelector = (state: RootState) => state.orderDetail;
