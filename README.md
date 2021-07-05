@@ -5,7 +5,7 @@
 [https://practical-sammet-364a67.netlify.app/](https://practical-sammet-364a67.netlify.app/)
 
 
-# Para poder correr el projecto es nesesario lo siguiente:
+# Para poder correr el projecto es necesario lo siguiente:
 
 ## Generar archivo .env.local
 
