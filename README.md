@@ -1,8 +1,8 @@
 # Aqui se puede encontra el prototipo en Figma
-[https://www.figma.com/file/TRHWoOcKfacGisW9lYhAG3/Untitled?node-id=15%3A307](Click para veer el prototipo)
+[https://www.figma.com/file/TRHWoOcKfacGisW9lYhAG3/Untitled?node-id=15%3A307](https://www.figma.com/file/TRHWoOcKfacGisW9lYhAG3/Untitled?node-id=15%3A307)
 
 # Aqui un deploy en Netlify del projecto
-[https://practical-sammet-364a67.netlify.app/](Click para ver el sitio)
+[https://practical-sammet-364a67.netlify.app/](https://practical-sammet-364a67.netlify.app/)
 
 
 # Para poder correr el projecto es nesesario lo siguiente:
