@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import MainWrapper from '../Utilities/MainWrapper';
 
 const StyledHeader = styled.header`
@@ -9,11 +10,16 @@ const StyledHeader = styled.header`
   font-size: 2rem;
   margin-bottom: 3.5rem;
 `;
-
+const StyledLink = styled(Link)`
+  color: white;
+  text-decoration: none;
+`;
 const Header = () => {
   return (
     <StyledHeader>
-      <MainWrapper>Order List Viewer</MainWrapper>
+      <MainWrapper>
+        <StyledLink to='/'>Order List Viewer</StyledLink>
+      </MainWrapper>
     </StyledHeader>
   );
 };
